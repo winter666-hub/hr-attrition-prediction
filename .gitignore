@@ -1,9 +1,41 @@
-.venv/
-venv/
-
-.vscode/
-
+# Python cache
 __pycache__/
 *.pyc
 
+# Virtual environment
+.venv/
+venv/
+
+# Environment variables
+.env
+
+# Jupyter Notebook checkpoint
 .ipynb_checkpoints/
+
+# VSCode settings
+.vscode/
+
+# MacOS
+.DS_Store
+
+# Database files
+*.db
+
+# Logs
+*.log
+
+# Pytest cache
+.pytest_cache/
+
+# Mypy cache
+.mypy_cache/
+
+# Build files
+build/
+dist/
+
+*.pkl
+*.joblib
+models/
+
+data/*.csv
