@@ -8,7 +8,7 @@ class Employees(Base):
     # 개인정보
     employee_number = Column(Integer, unique=True)
     age = Column(Integer)
-    gender = Column(String)
+    gender = Column(String)     
     marital_status = Column(String)              # 결혼 여부
     # 학력
     education = Column(Integer) # 1=Below College, 2=College, 3=Bachelor, 4=Master, 5=Doctor
