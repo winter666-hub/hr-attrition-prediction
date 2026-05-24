@@ -46,7 +46,7 @@ hr-attrition-prediction/
 - [x] PostgreSQL DB 설계 및 SQLAlchemy 연결
 - [x] CSV → DB 적재 파이프라인 구성
 - [x] EDA
-- [X] 데이터 전처리 (인코딩, 스케일링, train/test split))
+- [X] 데이터 전처리 (인코딩, 스케일링, train/test split)
 - [ ] 모델 학습 및 성능 비교 (Random Forest, XGBoost 등)
 - [ ] API 연동
 
@@ -54,10 +54,22 @@ hr-attrition-prediction/
 
 ## Models
 - Logistic Regression
-- (추가 예정)
+- Decision Tree
+- Random Forest
+- AdaBoost
+- XGBoost
+- SVM
 
 ---
 
+## Evaluate Metrics
+- Accuracy
+- Precision
+- Recall
+- F1-score
+- Confusion Matrix
+
+---
 ## Future Work
 - 다양한 모델 비교 (Random Forest, XGBoost 등)
 - FastAPI 기반 예측 API 구현
