@@ -59,6 +59,9 @@ hr-attrition-prediction/
 - AdaBoost
 - XGBoost
 - SVM
+- KNN
+- GBM
+- LightGBM
 
 ---
 
@@ -70,7 +73,18 @@ hr-attrition-prediction/
 - Confusion Matrix
 
 ---
+
 ## Future Work
 - 다양한 모델 비교 (Random Forest, XGBoost 등)
 - FastAPI 기반 예측 API 구현
 - 웹 서비스화
+
+---
+
+## Results
+| model | AUC | Recall (True) | F1 (True) |
+|-------|-----|---------------|-----------|
+| Logistic Regression (tuned) | 0.7888 | 0.72 | 0.43 |
+| SVM (tuned) | 0.7752 | 0.64 | 0.42 |
+| XGBoost (tuned) | - | 0.62 | 0.40 |
+| Random Forest (tuned) | - | 0.67 | 0.39 |
