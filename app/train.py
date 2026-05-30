@@ -1,5 +1,6 @@
 from preprocess import preprocess
 import matplotlib.pyplot as plt
+import pandas as pd
 from sklearn.linear_model import LogisticRegression
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import (
@@ -13,7 +14,9 @@ from sklearn.neighbors import KNeighborsClassifier
 from lightgbm import LGBMClassifier
 from sklearn.model_selection import (
     RandomizedSearchCV,
-    GridSearchCV)
+    GridSearchCV,
+    StratifiedKFold)
+from imblearn.pipeline import Pipeline
 from imblearn.over_sampling import SMOTE
 from catboost import CatBoostClassifier
 from sklearn.metrics import (
@@ -28,6 +31,11 @@ X_train, X_test, y_train, y_test, scaler = preprocess()
 
 print(f"훈련 세트{X_train.shape[0]}")
 print(f"테스트 세트{X_test.shape[0]}")
+
+# 훈련 세트1176
+# 테스트 세트294
+
+CV = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
 
 # evaluate 함수
 def evaluate_model (name, y_test, y_pred):
@@ -56,6 +64,17 @@ models = {
 smote = SMOTE(random_state=42)
 X_train_sm, y_train_sm = smote.fit_resample(X_train, y_train)
 
+# DataFrame 복원
+X_train_sm = pd.DataFrame(X_train_sm,columns=X_train.columns)
+y_train_sm = pd.Series(y_train_sm, name=y_train.name)
+
+# 클래스 분포 확인
+print("Before SMOTE")
+print(y_train.value_counts())
+
+print("\nAfter SMOTE")
+print(y_train_sm.value_counts())
+
 # 반복문으로 학습
 for name, model in models.items():
     model.fit(X_train_sm, y_train_sm)
@@ -67,31 +86,33 @@ for name, model in models.items():
 # 모델          정확도      Recall(True)        F1(True)
 # Logistic       0.72         0.59               0.36
 # RandomForest   0.88         0.10               0.19
-# XGBoost        0.87         0.31               0.39
-# SVM            0.85         0.46               0.44
+# XGBoost        0.89         0.38               0.48
+# SVM            0.88         0.46               0.50
 
 
 # ===== 로지스틱 회귀 튜닝 =====
+lr_pipe = Pipeline([
+    ("smote", SMOTE(random_state=42)),
+    ("clf", LogisticRegression(max_iter=10000, random_state=42))
+])
 
 lr_params = {
-    "C": [0.003, 0.01, 0.03],    # 규제 강도
-    "solver": ["liblinear", "lbfgs"]
+    "clf__C": [0.003, 0.01, 0.03],    # 규제 강도
+    "clf__solver": ["liblinear", "lbfgs"]
 }
 
 lr_grid = GridSearchCV(
-    LogisticRegression(
-        max_iter=10000,
-        class_weight="balanced",
-        ),
+    lr_pipe,
     lr_params,
-    cv=5,
+    cv=CV,
     scoring="recall",
     n_jobs=-1,
     verbose=1
 )
 
-lr_grid.fit(X_train_sm, y_train_sm)
+lr_grid.fit(X_train, y_train)
 print(lr_grid.best_params_)
+print("Best CV score (PR-AUC):", lr_grid.best_score_)
 
 
 best_lr = lr_grid.best_estimator_
@@ -120,6 +141,7 @@ plt.title("ROC Curve - Logistic Regression")
 plt.legend()
 
 plt.savefig("../models/roc_lr.png")
+plt.close()
 
 for threshold in [0.5, 0.4, 0.3, 0.25]:
     y_lr_pred = (y_lr_prob >= threshold).astype(int)
@@ -262,6 +284,7 @@ plt.title("ROC Curve - SVM")
 plt.legend()
 
 plt.savefig("../models/roc_svm.png")
+plt.close()
 
 for threshold in [0.5, 0.4, 0.3, 0.25]:
     y_svm_pred = (y_svm_prob >= threshold).astype(int)
@@ -285,7 +308,8 @@ cat_grid = RandomizedSearchCV(
     CatBoostClassifier(
         loss_function="Logloss",
         random_state=42,
-        verbose=0
+        verbose=0,
+        allow_writing_files=False
     ),
     cat_params,
     n_iter=20,
