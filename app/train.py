@@ -1,4 +1,5 @@
 from preprocess import preprocess
+import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 from sklearn.linear_model import LogisticRegression
@@ -26,6 +27,7 @@ from sklearn.metrics import (
     roc_auc_score,
     roc_curve
 )
+import joblib
 
 X_train, X_test, y_train, y_test, scaler = preprocess()
 
@@ -328,6 +330,12 @@ evaluate_model("CatBoost (tuned)", y_test, y_cat_tuned_pred)
 
 y_cat_prob = cat_grid.best_estimator_.predict_proba(X_test)[:, 1]
 
-for threshold in [0.5, 0.4, 0.3, 0.25]:
+for threshold in [0.35, 0.37, 0.40, 0.42, 0.45]:
     y_cat_pred = (y_cat_prob >= threshold).astype(int)
     evaluate_model(f"CatBoost threshold={threshold}", y_test, y_cat_pred)
+
+# 최종 모델 CatBoost threshold = 0.40
+joblib.dump(cat_grid.best_estimator_, "../models/catboost_best_model.pk1")
+joblib.dump(scaler, "../models/scaler.pk1")
+
+print("모델 저장 완료")
