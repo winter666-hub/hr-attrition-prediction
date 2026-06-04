@@ -352,9 +352,3 @@ feature_cols = X_train.columns
 joblib.dump(feature_cols, "../models/feature_cols.pkl")
 
 print("모델 저장 완료")
-
-# git commit -m "refactor: improve preprocessing pipeline and add inference transform"
-
-# git commit -m "feat: train model and save scaler, feature columns"
-
-# git commit -m "feat: add FastAPI prediction endpoint"
