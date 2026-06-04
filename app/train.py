@@ -2,6 +2,7 @@ from preprocess import preprocess
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
+import os
 from sklearn.linear_model import LogisticRegression
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import (
@@ -297,10 +298,12 @@ for threshold in [0.5, 0.4, 0.3, 0.25]:
 # LR (tuned)           0.7888   0.72    0.43
 # SVM (tuned)          0.7752   0.64    0.42
 
+os.makedirs("saved_models", exist_ok=True)
+
 cat_params = {
     "iterations": [150, 200, 250,],
     "learning_rate": [0.03, 0.05, 0.07, 0.1],
-    "depth": [2, 3, 4],
+    "depth": [2, 3, 4, 5],
     "l2_leaf_reg": [5, 7, 9, 11],
     "border_count": [32, 64, 128],
     "subsample": [0.6, 0.8, 1.0]
@@ -309,8 +312,13 @@ cat_params = {
 cat_grid = RandomizedSearchCV(
     CatBoostClassifier(
         loss_function="Logloss",
+        eval_metric="recall",
         random_state=42,
-        verbose=0,
+        verbose=100,
+
+        # GPU 사용
+        task_type="GPU",
+        devices='0',
         allow_writing_files=False
     ),
     cat_params,
@@ -335,7 +343,7 @@ for threshold in [0.35, 0.37, 0.40, 0.42, 0.45]:
     evaluate_model(f"CatBoost threshold={threshold}", y_test, y_cat_pred)
 
 # 최종 모델 CatBoost threshold = 0.40
-joblib.dump(cat_grid.best_estimator_, "../models/catboost_best_model.pk1")
-joblib.dump(scaler, "../models/scaler.pk1")
+joblib.dump(cat_grid.best_estimator_, "../saved_models/catboost_best_model.pk1")
+joblib.dump(scaler, "../saved_models/scaler.pk1")
 
 print("모델 저장 완료")
