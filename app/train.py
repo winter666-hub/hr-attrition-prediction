@@ -347,4 +347,14 @@ for threshold in [0.35, 0.37, 0.40, 0.42, 0.45]:
 joblib.dump(cat_grid.best_estimator_, "../models/catboost_best_model.pkl")
 joblib.dump(scaler, "../models/scaler.pkl")
 
+# api
+feature_cols = X_train.columns
+joblib.dump(feature_cols, "../models/feature_cols.pkl")
+
 print("모델 저장 완료")
+
+# git commit -m "refactor: improve preprocessing pipeline and add inference transform"
+
+# git commit -m "feat: train model and save scaler, feature columns"
+
+# git commit -m "feat: add FastAPI prediction endpoint"
