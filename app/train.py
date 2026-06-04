@@ -335,7 +335,7 @@ for threshold in [0.35, 0.37, 0.40, 0.42, 0.45]:
     evaluate_model(f"CatBoost threshold={threshold}", y_test, y_cat_pred)
 
 # 최종 모델 CatBoost threshold = 0.40
-joblib.dump(cat_grid.best_estimator_, "../models/catboost_best_model.pk1")
-joblib.dump(scaler, "../models/scaler.pk1")
+joblib.dump(cat_grid.best_estimator_, "../models/catboost_best_model.pkl")
+joblib.dump(scaler, "../models/scaler.pkl")
 
 print("모델 저장 완료")
