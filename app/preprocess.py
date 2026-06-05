@@ -38,7 +38,7 @@ def preprocess():
         random_state=42
     )
 
-    feature_cols = X.train.columns
+    feature_cols = X_train.columns
 
     # scaling
     scaler = StandardScaler()
@@ -57,6 +57,7 @@ def preprocess():
 
 
     return X_train_scaled, X_test_scaled, y_train, y_test, scaler, feature_cols
+
 
 def transform_input(data, scaler, feature_cols):
 
