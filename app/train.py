@@ -312,13 +312,10 @@ cat_params = {
 cat_grid = RandomizedSearchCV(
     CatBoostClassifier(
         loss_function="Logloss",
-        eval_metric="recall",
+        eval_metric="Recall",
         random_state=42,
         verbose=100,
-
-        # GPU 사용
-        task_type="GPU",
-        devices='0',
+        task_type="CPU",
         allow_writing_files=False
     ),
     cat_params,

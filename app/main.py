@@ -55,5 +55,5 @@ def root():
 def predict(data: EmployeeData):
     input_dict = data.model_dump()
     df = transform_input(input_dict, scaler, feature_cols)
-    prediction = model.predict(df)
+    prediction = model.predict_proba(df)[:, 1] >= 0.4
     return {"prediction": int(prediction[0])}
