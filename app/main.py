@@ -1,9 +1,8 @@
 from fastapi import FastAPI
 import joblib
 from pydantic import BaseModel
-import pandas as pd
 import os
-from preprocess import transform_input
+from app.preprocess import transform_input
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 model = joblib.load(os.path.join(BASE_DIR, "models", "catboost_best_model.pkl"))

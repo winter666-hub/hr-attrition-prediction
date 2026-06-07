@@ -30,7 +30,7 @@ from sklearn.metrics import (
 )
 import joblib
 
-X_train, X_test, y_train, y_test, scaler = preprocess()
+X_train, X_test, y_train, y_test, scaler, feature_cols = preprocess()
 
 print(f"훈련 세트{X_train.shape[0]}")
 print(f"테스트 세트{X_test.shape[0]}")
@@ -335,11 +335,39 @@ evaluate_model("CatBoost (tuned)", y_test, y_cat_tuned_pred)
 
 y_cat_prob = cat_grid.best_estimator_.predict_proba(X_test)[:, 1]
 
-for threshold in [0.35, 0.37, 0.40, 0.42, 0.45]:
+for threshold in [0.35, 0.37, 0.40, 0.42, 0.45, 0.50]:
     y_cat_pred = (y_cat_prob >= threshold).astype(int)
     evaluate_model(f"CatBoost threshold={threshold}", y_test, y_cat_pred)
 
 # 최종 모델 CatBoost threshold = 0.40
+
+best_threshold = 0.40
+
+y_cat_final = (y_cat_prob >= best_threshold).astype(int)
+
+# 최종 평가
+evaluate_model(f"CatBoost Final threshold={best_threshold}",y_test, y_cat_final)
+
+cat_auc = roc_auc_score(y_test, y_cat_prob)
+
+print("=" * 60)
+print(f"CatBoost AUC: {cat_auc:.4f}")
+print("=" * 60)
+
+# ROC Curvs
+cat_fpr, cat_tpr, _ = roc_curve(y_test, y_cat_prob)
+
+plt.figure(figsize=(8, 6))
+plt.plot(cat_fpr, cat_tpr, label=f"CatBoost (AUC = {cat_auc:.4f})")
+plt.plot([0, 1], [0, 1], linestyle="--")
+
+plt.xlabel("False Positive Rate")
+plt.ylabel("True Positive Rate")
+plt.title("ROC Curve - CatBoost")
+plt.legend()
+
+plt.savefig("../models/roc_catBoost.png")
+plt.close()
 
 joblib.dump(cat_grid.best_estimator_, "../models/catboost_best_model.pkl")
 joblib.dump(scaler, "../models/scaler.pkl")

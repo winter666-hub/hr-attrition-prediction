@@ -89,5 +89,4 @@ hr-attrition-prediction/
 |-------|-----|---------------|-----------|
 | Logistic Regression (tuned) | 0.7888 | 0.72 | 0.43 |
 | SVM (tuned) | 0.7752 | 0.64 | 0.42 |
-| XGBoost (tuned) | - | 0.62 | 0.40 |
-| Random Forest (tuned) | - | 0.67 | 0.39 |
+| CatBoost (tuned) | 0.7920 | 0.51 | 0.53 |
