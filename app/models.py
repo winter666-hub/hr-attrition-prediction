@@ -1,5 +1,6 @@
-from sqlalchemy import Column, Integer, String, Boolean
-from base import Base
+from sqlalchemy import Column, Integer, String, Boolean, Float, DateTime
+from app.base import Base
+from datetime import datetime
 
 class Employees(Base):
     __tablename__ = "employees"
@@ -51,3 +52,12 @@ class Employees(Base):
 
     # target
     attrition = Column(Boolean)
+
+class Predictions(Base):
+    __tablename__ = "predictions"
+
+    id = Column(Integer, primary_key=True)
+    employee_number = Column(Integer)
+    prediction = Column(Integer)           # 0 or 1
+    probability = Column(Float)            # 예측 확률
+    created_at = Column(DateTime, default=datetime.utcnow)
