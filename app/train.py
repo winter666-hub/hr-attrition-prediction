@@ -143,7 +143,7 @@ plt.ylabel("True Positive Rate")
 plt.title("ROC Curve - Logistic Regression")
 plt.legend()
 
-plt.savefig("../models/roc_lr.png")
+plt.savefig("../assets/roc_lr.png")
 plt.close()
 
 for threshold in [0.5, 0.4, 0.3, 0.25]:
@@ -286,7 +286,7 @@ plt.ylabel("True Positive Rate")
 plt.title("ROC Curve - SVM")
 plt.legend()
 
-plt.savefig("../models/roc_svm.png")
+plt.savefig("../assets/roc_svm.png")
 plt.close()
 
 for threshold in [0.5, 0.4, 0.3, 0.25]:
@@ -366,7 +366,7 @@ plt.ylabel("True Positive Rate")
 plt.title("ROC Curve - CatBoost")
 plt.legend()
 
-plt.savefig("../models/roc_catBoost.png")
+plt.savefig("../assets/roc_svm.png")
 plt.close()
 
 joblib.dump(cat_grid.best_estimator_, "../models/catboost_best_model.pkl")

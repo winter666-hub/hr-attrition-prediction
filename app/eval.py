@@ -32,5 +32,5 @@ plt.title("Top 15 Feature Importance")
 plt.gca().invert_yaxis()
 plt.tight_layout()
 
-plt.savefig("../models/feature_importance.png")
+plt.savefig("../assets/feature_importance.png")
 plt.close()
